@@ -1,0 +1,627 @@
+/* import google fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700");
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: #dfe9f5;
+}
+
+.container {
+  display: flex;
+}
+
+nav {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+  left: 0;
+  background: #fff;
+  width: 280px;
+  overflow: hidden;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  text-align: center;
+  display: flex;
+  margin: 10px 0 0 15px;
+}
+
+.logo img {
+  width: 45px;
+  height: auto;
+}
+
+.logo span {
+  font-weight: bold;
+  padding-left: 15px;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+a {
+  position: relative;
+  color: rgb(85, 83, 83);
+  font-size: 14px;
+  display: table;
+  width: 280px;
+  padding: 10px;
+}
+
+nav .fas {
+  position: relative;
+  width: 70px;
+  height: 40px;
+  top: 14px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.nav-item {
+  position: relative;
+  top: 10px;
+}
+
+a:hover {
+  background: #eee;
+}
+
+.logout {
+  position: absolute;
+  bottom: 0;
+}
+
+/* Main Section */
+.main {
+  position: relative;
+  padding: 20px;
+  width: 100%;
+}
+
+.main-top {
+  display: flex;
+  width: 100%;
+}
+
+.main-top i {
+  position: absolute;
+  right: 0;
+  margin: 10px 30px;
+  color: rgb(110, 109, 109);
+  cursor: pointer;
+}
+
+.main-skills {
+  display: flex;
+  margin-top: 20px;
+}
+
+.main-skills .card {
+  width: 25%;
+  height: 100px;
+  margin: 10px;
+  background: #fff;
+  text-align: center;
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.main-skills .card h3 {
+  margin: 10px;
+  text-transform: capitalize;
+}
+
+.main-skills .card p {
+  font-size: 12px;
+}
+
+.main-skills .card button {
+  background: orangered;
+  color: #fff;
+  padding: 7px 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.main-skills .card button:hover {
+  background: rgba(223, 70, 15, 0.856);
+}
+
+.main-skills .card i {
+  font-size: 22px;
+  padding: 10px;
+}
+
+/* Courses */
+.main-course {
+  display: flex;
+  margin-top: 20px;
+  margin-block: center;
+}
+
+.course-box {
+  width: 53%;
+  height: 400px;
+  margin-top: 20px;
+  padding-left: 10px;
+  margin-right: 20px;
+  margin-left: 10px;
+  margin-block: center;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.course-box h1 {
+    font-size: 20px;
+    margin: 10px;
+}
+
+.course-box ul {
+  list-style: none;
+  display: flex;
+}
+
+.course-box ul li {
+  margin: 10px;
+  color: gray;
+  cursor: pointer;
+}
+
+.course-box ul .active {
+  color: #000;
+  border-bottom: 1px solid #000;
+}
+
+.course-box .course {
+  display: flex;
+}
+
+.box {
+  width: 33%;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  background: rgb(235, 233, 233);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.box p {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.box button {
+  background: #000;
+  color: #fff;
+  padding: 7px 10px;
+  border-radius: 10px;
+  margin-top: 3rem;
+  cursor: pointer;
+}
+
+.box button:hover {
+  background: rgba(0, 0, 0, 0.842);
+}
+
+.box i {
+  font-size: 7rem;
+  float: right;
+  margin: -20px 20px 20px 0;
+}
+
+.html {
+  color: rgb(25, 94, 54);
+}
+
+.css {
+  color: rgb(104, 179, 35);
+}
+
+.js {
+  color: rgb(28, 98, 179);
+}
+
+.hidden {
+  display: none;
+}
+
+/* classroom */
+
+
+.title {
+    margin: 20px;
+    text-align: center;
+}
+
+.class-table {
+    display: flex;
+    width: 98%;
+    height: 70%;
+    margin: 20px;
+    border-radius: 20px;
+    background: rgb(255, 255, 255);
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.class-table table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 16px;
+}
+
+.class-table th {
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-weight: bold;
+}
+
+.class-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.create-class {
+  display: flex;
+  height: 50px;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-create-class {
+  background-color: green;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: auto;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+}
+
+.popup-content {
+  position: relative; /* Change to relative positioning */
+  width: calc(85% - 280px);
+  height: 85%;
+  margin: 0 auto;
+  margin-top: 3%;
+  margin-left: auto; /* Move the popup-content to the right */
+  margin-right: 160px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-content .form-row {
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.form-row label {
+  margin-right: 10px;
+  margin-top: 3%;
+}
+
+.form-row select {
+  width: 100%; /* Set the width of the dropdown box */
+  padding: 5px; /* Add some padding */
+  font-size: 16px; /* Set the font size */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 3%;
+}
+.popup-content h2 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.popup-content p {
+  font-size: 16px;
+  margin-top: 60px;
+}
+
+.popup-content .button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto; /* Push the button container to the bottom */
+}
+
+.button-add-class {
+  background-color: green;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  margin-top: auto; /* Adjust the margin to position the button */
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+/* SETUP */
+
+.class-time {
+    width: 100;
+    height: 60px;
+    padding: 10px;
+    margin: 20px;
+    border-radius: 20px;
+    background: rgb(255, 255, 255);
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+}
+
+.camera-setup {
+    width: 100;
+    height: 70%;
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    background: rgb(255, 255, 255);
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.camera {
+  display: flex;
+  height: 50px;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: auto;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.button-camera {
+  background-color: green;
+  color: white;
+  border: 2px solid #4CAF50;
+  margin-left: 5px;
+}
+
+.button-camera:hover {
+  background-color: #b6d6b7;
+  color: black;
+}
+
+.button-camera.stop {
+  background-color: red;
+  border-color: #FF0000;
+  margin-right: 5px;
+}
+
+.button-camera.stop:hover {
+  background-color: #FFB6B7;
+}
+
+/* Analysis */
+
+.data-emotion{
+    margin-top: 10px;
+    display: flex;
+}
+
+.data {
+  width: 100%;
+  height: 100%;
+  margin: 10px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 5%;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.graph {
+    width: 100%;
+    height: 100%;
+    margin: 10px;
+    background: #fff;
+    text-align: center;
+    border-radius: 20px;
+    padding: 10%;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+.graph2 {
+    margin-top: 20px;
+    display: flex;
+}
+
+.class-time select {
+  width: 100%; /* Set the width of the dropdown box */
+  padding: 5px; /* Add some padding */
+  font-size: 20px; /* Set the font size */
+  border: none;
+  font-weight: bold;
+}
+
+.analysis-container {
+  margin-top: 10px; /* Increase the margin-top value to create space for the header */
+  padding: 20px; /* Add padding to create space around the content */
+  overflow: auto;
+  height: calc(100vh - 150px); /* Adjust the height to fill the remaining viewport height */
+  box-sizing: border-box; /* Include padding in the total height calculation */
+}
+
+.analysis-form-container {
+  width: 100;
+  height: 60px;
+  padding: 10px;
+  margin: 20px;
+  border-radius: 20px;
+  background: rgb(255, 255, 255);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+}
+
+.analysis-form-container select {
+  width: 100%; /* Set the width of the dropdown box */
+  padding: 5px; /* Add some padding */
+  font-size: 20px; /* Set the font size */
+  border: none;
+  font-weight: bold;
+}
+
+.analysis-second-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+/* Styling for the small containers */
+.first-small-container,
+.second-small-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.first-small-container,
+.second-small-container,
+.third-small-container,
+.fourth-small-container {
+  height: 35vh;
+  margin: 15px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background: rgb(255, 255, 255);
+  border: 2px solid #ccc; /* Increase border size */
+}
+
+/* Common styles for both containers */
+.first-small-container table,
+.second-small-container table {
+  table-layout: fixed; /* Use fixed table layout */
+  width: 90%;
+  
+}
+
+.first-small-container th,
+.first-small-container td,
+.second-small-container th,
+.second-small-container td {
+  border: 1px solid #07436b;
+  padding: 8px;
+  text-align: left;
+}
+
+.first-small-container th {
+  background-color: #0573bc;
+}
+
+/* Styling for the first-small-container table */
+.first-small-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.first-small-container table {
+  margin: 0 auto;
+}
+
+/* Styling for the second-small-container table */
+.second-small-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.second-small-container table {
+  margin: 0 auto;
+}
+
+/* Styling for the percentage table header cells */
+.second-small-container th {
+  font-weight: bold;
+  background-color: #0573bc;
+}
+
+/* Add hover effect on table rows */
+.first-small-container tr:hover,
+.second-small-container tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Styling for the Pie Chart */
+#pieChart {
+  width: 100%;
+  height: 100%;
+}
+
+/* Styling for the Pie Chart */
+#dotPlot {
+  width: 100%;
+  height: 100%;
+}

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF=8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/index.css">
+    
+    <title>Main Page</title>
+</head>
+<body>
+    <div class="container">
+        <video autoplay loop muted plays-inline class="background-clip">
+            <source src="static/video-frontpage.mp4" type="video/mp4">
+        </video>
+
+        <div class="content">
+            <img src="static/logo.png" alt="Logo" class="logo">
+            <h1>Welcome To My Final Year Project</h1>
+            <h2>Web Application of Facial Emotion Recognition using Raspberry PI 4 in Classroom Learning Environment</h2>
+            <a href="#" class="button" id="button">Get Started</a>
+        </div>
+    </div>
+
+    <div class="popup">
+        <div class="close-btn">&times;</div>
+    <section class="wrapper">
+      <div class="form signup">
+        <header>Register</header>
+        <form action="#" onsubmit="return validateForm()">
+          <input type="text" id="name" name="name" placeholder="Name" required />
+          <input type="text" id="email" name="email" placeholder="Email" required autocomplete="username"/>
+          <input type="password" id="password" name="password" placeholder="Password" required autocomplete="new-password"/>
+          <input type="password" id="repeatPassword" name="repeatPassword" placeholder="Repeat Password" required autocomplete="new-password"/> 
+          <div class="checkbox">
+            <input type="checkbox" id="signupCheck" />
+            <label for="signupCheck">I accept all terms & conditions</label>
+          </div>
+          <input type="submit" id= 'signUp' name="signup_submit" value="Signup" />
+        </form>
+      </div>
+      <div class="form login">
+        <header>Login</header>
+        <form action="#">
+          <input type="email" id="login_email" name="login_email" placeholder="Email address" required autocomplete="username"/>
+          <input type="password" id="login_password" name="login_password" placeholder="Password" required autocomplete="current-password"/>
+          <div class="checkbox">
+            <input type="checkbox" id="rememberCheck" />
+            <label for="rememberCheck">Remember me</label>
+          </div>
+          <a href="#">Forgot password?</a>
+          <input type="submit" id= 'logIn' name="logIn_submit" value="Login" />
+        </form>
+      </div>
+    </div>
+
+
+      <script>
+        
+        document.getElementById("button").addEventListener("click", function(){
+            document.querySelector(".popup").style.display = "flex";
+        });
+
+        document.querySelector(".close-btn").addEventListener("click", function(){
+            document.querySelector(".popup").style.display = "none";
+        });
+
+        const wrapper = document.querySelector(".wrapper"),
+          signupHeader = document.querySelector(".signup header"),
+          loginHeader = document.querySelector(".login header");
+        loginHeader.addEventListener("click", () => {
+          wrapper.classList.add("active");
+        });
+        signupHeader.addEventListener("click", () => {
+          wrapper.classList.remove("active");
+        });
+      </script>
+    </section>
+
+</body>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+  import { getDatabase, set, ref, update, get } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCvWUhs0nUq5UwITHSR0FS40VYOKEBwgaw",
+    authDomain: "facialemotionrecognitionsystem.firebaseapp.com",
+    databaseURL: "https://facialemotionrecognitionsystem-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "facialemotionrecognitionsystem",
+    storageBucket: "facialemotionrecognitionsystem.appspot.com",
+    messagingSenderId: "1013081894780",
+    appId: "1:1013081894780:web:8a0cf2b3127592f5dc7ef9",
+    measurementId: "G-34KEZFNXSR"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+  const auth = getAuth();
+
+  document.getElementById('signUp').addEventListener('click',(e) => {
+    e.preventDefault();
+
+    var name = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    var repeatPassword = document.getElementById("repeatPassword").value;
+
+    if (password !== repeatPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in 
+      const user = userCredential.user;
+      
+      // Store the user ID in localStorage
+      localStorage.setItem('userID', user.uid);
+
+      set(ref(database, 'users/' + user.uid),{
+        name: name,
+        email: email,
+        password: password
+      })
+      alert('New User created, Hello!')
+      window.location.href = '/db'; // Redirect to db.html
+      // ...
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+
+      alert(errorMessage)
+      // ..
+    });
+  });
+
+
+  // Login event listener
+  document.getElementById("logIn").addEventListener("click", function() {
+    var login_email = document.getElementById("login_email").value;
+    var login_password = document.getElementById("login_password").value;
+
+    signInWithEmailAndPassword(auth, login_email, login_password)
+      .then(function(userCredential) {
+        // Signed in
+        const user = userCredential.user;
+
+        // Store the user ID in localStorage
+        localStorage.setItem('userID', user.uid);
+
+        const dt = new Date();
+        update(ref(database, "users/" + user.uid), {
+          last_login: dt,
+        });
+
+        window.location.href = "/db"; // Redirect to db.html
+      })
+      .catch(function(error) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        alert(errorMessage);
+      });
+
+      // Retrieve the userID from localStorage
+      const userID = localStorage.getItem('userID');
+
+      // Check if the userID exists
+      if (userID) {
+        // Use the userID as needed
+        console.log('User ID:', userID);
+      } 
+      else {
+        // The userID doesn't exist in localStorage
+        console.log('User ID not found');
+      }
+  });
+
+</script>
+</html>

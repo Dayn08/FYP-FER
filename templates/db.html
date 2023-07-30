@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="static/db.css" />
+  <!-- Font Awesome Cdn Link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <ul>
+        <li><a href="#" class="logo">
+          <img src="static/icon.png" alt="">
+          <span class="nav-item">DashBoard</span>
+        </a></li>
+        <li><a href="#" class="classroom-link">
+          <i class="fas fa-tasks"></i>
+          <span class="nav-item">Classroom</span>
+        </a></li>
+        <li><a href="#" class="setup-link">
+          <i class="fas fa-camera"></i>
+          <span class="nav-item">Setup</span>
+        </a></li>
+        <li><a href="#" class="analysis-link">
+          <i class="fas fa-chart-bar"></i>
+          <span class="nav-item">Analysis</span>
+        </a></li>
+        <li><a href="" class="logout">
+          <i class="fas fa-sign-out-alt"></i>
+          <button onclick="logout()">Log out</button>
+        </a></li>
+      </ul>
+    </nav>
+
+    <section id="class-section" class="main">
+      <div class="main-top">
+        <h1>Classroom</h1>
+      </div>
+
+      <div class="title">
+        <h2>TIME TABLE</h2>
+      </div>
+
+      <div class="class-table" id="classTable">
+        <table id="timetableTable">
+          <thead>
+            <tr>
+              <th>Day</th>
+              <th>Time</th>
+              <th>Subject</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>>
+
+      <div class="create-class">
+        <button type="submit" id="createClass" class="button-create-class">Add Class</button>
+      </div>
+
+      <div id="popup" class="popup">
+        <div class="popup-content">
+          <button id="closePopup" class="close-button">X</button>
+          <!-- Add your pop-up content here -->
+          <h2>Add Class</h2>
+          <div class="form-row">
+            <label for="subjectName">Subject:</label>
+            <select id="subjectName"></select>
+          </div>
+          <p>Credits: <span id="courseCredits"></span></p>
+          <p>Faculty: <span id="courseFaculty"></span></p>
+          <p>Level: <span id="courseLevel"></span></p>
+          <div class="form-row">
+            <label for="day">Day:</label>
+            <select id="day">
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="time">Time:</label>
+            <select id="time">
+              <option value="8:00 - 10:00">8:00 - 10:00</option>
+              <option value="10:00 - 12:00">10:00 - 12:00</option>
+              <option value="14:00 - 16:00">14:00 - 16:00</option>
+              <option value="16:00 - 18:00">16:00 - 18:00</option>
+            </select>
+        </div>
+        <div class="button-container">
+          <button type="submit" id="addClass" class="button-add-class">Add</button>
+        </div>
+      </div>
+
+    </section>
+
+    <section id="setup-section" class="Class hidden main">
+      <div class="main-top">
+        <h1>Setup</h1>
+      </div>
+
+      <div class="class-time">
+        <select id="classDropdown">
+          <option value="" disabled selected>Select a class</option>
+        </select>
+      </div>
+
+      <div class="camera-setup">
+        <img src="{{ url_for('video_feed') }}" id="video-feed" alt="Video Feed">
+      </div>
+
+      <div class="camera">
+        <form id="startForm" action="{{ url_for('start_emotion_recognition_route') }}" method="POST">
+          <button type="submit" id="startButton" class="button button-camera" disabled>Start</button>
+        </form>
+        <form id="stopForm" action="{{ url_for('stop_emotion_recognition_route') }}" method="POST">
+          <button type="submit" id="stopButton" class="button button-camera stop">Stop</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="analysis-section" class="Class hidden main">
+      <div class="main-top">
+        <h1>Analysis</h1>
+      </div>
+
+      <div class="analysis-container">
+        <div class="analysis-form-container">
+            <select name="choose_class" id="choose-class">
+            </select>
+        </div>
+
+        <div class="analysis-second-container">
+            <div class="first-small-container">
+                <p>Count Emotion</p>
+                <table>
+                  <tr>
+                    <th>Max Emotion</th>
+                    <td id="maxEmotion">Loading...</td>
+                  </tr>
+                  <tr>
+                    <th>Min Emotion</th>
+                    <td id="minEmotion">Loading...</td>
+                  </tr>
+                    <th>Total Count Emotion</th>
+                    <td id="totalCountEmotion">Loading...</td>
+                  </tr>
+                </table>
+            </div>
+            <div class="second-small-container">
+              <p>Emotion Percentage</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Emotion</th>
+                    <th>Count</th>
+                    <th>Percentage</th>
+                  </tr>
+                </thead>
+                <tbody id="percentageContainer"></tbody>
+              </table>
+            </div>
+            <div class="third-small-container">
+                <div id="pieChart"></div>
+            </div>
+
+            <div class="fourth-small-container">
+                <div id="dotPlot"></div>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <script>
+      // Check if the user is logged in, and if not, redirect to the login page
+      /*if (!localStorage.getItem('userLoggedIn')) {
+        window.location.href = '/';
+      }*/
+  
+      function logout() {
+        // Clear user information from local storage
+        localStorage.removeItem('userLoggedIn');
+        localStorage.removeItem('userPassword');
+  
+        // Redirect to the login page
+        window.location.href = '/';
+      }
+    </script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+      import { getDatabase, ref, onValue, get, push, remove, set} from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+
+
+      // Your Firebase configuration
+      var firebaseConfig = {
+          apiKey: "AIzaSyCvWUhs0nUq5UwITHSR0FS40VYOKEBwgaw",
+          authDomain: "facialemotionrecognitionsystem.firebaseapp.com",
+          databaseURL: "https://facialemotionrecognitionsystem-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "facialemotionrecognitionsystem",
+          storageBucket: "facialemotionrecognitionsystem.appspot.com",
+          messagingSenderId: "1013081894780",
+          appId: "1:1013081894780:web:8a0cf2b3127592f5dc7ef9",
+          measurementId: "G-34KEZFNXSR"
+      };
+  
+      // Retrieve the userID from localStorage
+      const userID = localStorage.getItem('userID');
+
+      // Check if the userID exists
+      if (userID) {
+        // Use the userID as needed
+        console.log('User ID:', userID);
+      } else {
+        // The userID doesn't exist in localStorage
+        console.log('User ID not found');
+      }
+
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+      const firebaseRef = ref(database, "1lVUQE1H5cSX_SgOfqAbq5uyWqxWe2BVD3jdTpXfRCQU/Sheet1");
+
+      const courseDropdown = document.getElementById('subjectName');
+      const dayDropdown = document.getElementById('day');
+      const timeDropdown = document.getElementById('time');
+      const courseCreditsField = document.getElementById('courseCredits');
+      const courseFacultyField = document.getElementById('courseFaculty');
+      const courseLevelField = document.getElementById('courseLevel');
+
+      // Function to fetch the user's name based on the userId from Realtime Database
+      function fetchUserNameFromDatabase(userId) {
+        // Replace "users" with your node name
+        const userRef = ref(database, "users/" + userId);
+
+        return get(userRef)
+          .then((snapshot) => {
+            const userData = snapshot.val();
+            if (userData && userData.name) {
+              // Return the user's name
+              return userData.name;
+            } else {
+              // Handle the case when the user's data is not found or does not have a name
+              return "User Not Found";
+            }
+          })
+          .catch((error) => {
+            // Handle errors if any occur
+            console.error("Error fetching user data:", error);
+            return "Error fetching user data";
+          });
+      }
+
+      // Retrieve the userId from localStorage and fetch the user's name
+      const userId = localStorage.getItem("userID");
+      /*if (userId) {
+        fetchUserNameFromDatabase(userId)
+          .then((userName) => {
+            updateUserNameInUI(userName);
+          })
+          .catch((error) => {
+            console.error(error);
+            updateUserNameInUI("Error fetching user data");
+          });
+      }*/
+
+      // Function to update the timetable table
+      function updateTimetableTableForUser(userID) {
+        const tableBody = document.querySelector('#timetableTable tbody');
+        tableBody.innerHTML = ''; // Clear the previous content of the table body
+
+        // Get the reference to the timetable node in the database
+        const timetableRef = ref(database, "timetable");
+
+        // Fetch the timetable data from Firebase
+        get(timetableRef)
+          .then((snapshot) => {
+            const timetableData = snapshot.val();
+
+            // Check if timetableData exists and is an object
+            if (timetableData && typeof timetableData === 'object') {
+              // Filter timetable data based on the user ID
+              const userTimetableData = Object.values(timetableData).filter(classData => classData.userID === userID);
+
+              // Define the custom order of days and times
+              const dayOrder = { "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5 };
+              const timeOrder = {
+                "8:00 - 10:00": 1,
+                "10:00 - 12:00": 2,
+                "14:00 - 16:00": 3,
+                "16:00 - 18:00": 4
+              };
+
+              // Sort the timetable data by day and time using the custom order
+              const sortedTimetableData = userTimetableData.sort((a, b) => {
+                const dayComparison = dayOrder[a.day] - dayOrder[b.day];
+                if (dayComparison !== 0) return dayComparison;
+                return timeOrder[a.time] - timeOrder[b.time];
+              });
+
+
+              // Create the table rows with class data
+              sortedTimetableData.forEach(classData => {
+                const { subjectName, day, time } = classData;
+                const row = document.createElement('tr');
+                const rowData = [day, time, subjectName];
+                rowData.forEach(cellData => {
+                  const cell = document.createElement('td');
+                  cell.textContent = cellData;
+                  row.appendChild(cell);
+                });
+                tableBody.appendChild(row);
+              });
+            } else {
+              // If no timetable data exists, display a message
+              tableBody.textContent = 'No classes in the timetable.';
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching timetable data:", error);
+            tableBody.textContent = 'Error fetching timetable data.';
+          });
+      }
+
+      // Declare sheetData outside the onValue callback
+      let sheetData;
+
+      // Function to update course details based on selected subject
+      function updateCourseDetails(courseName) {
+        const selectedCourse = sheetData[courseName];
+        if (selectedCourse) {
+          courseCreditsField.textContent = selectedCourse.Credits;
+          courseFacultyField.textContent = selectedCourse.Faculty;
+          courseLevelField.textContent = selectedCourse.Level;
+        } else {
+          courseCreditsField.textContent = "";
+          courseFacultyField.textContent = "";
+          courseLevelField.textContent = "";
+        }
+      }
+
+      // Function to add a class to the timetable
+      function addClassToTimetable() {
+        const selectedCourseName = courseDropdown.value;
+        const selectedDay = dayDropdown.value;
+        const selectedTime = timeDropdown.value;
+        const userID = localStorage.getItem('userID'); // Retrieve the user ID from localStorage
+
+        if (selectedCourseName && selectedDay && selectedTime && userID) {
+          // Get the reference to the timetable node in the database
+          const timetableRef = ref(database, "timetable");
+
+          // Check if there's already a class at the selected day and time
+          get(timetableRef)
+            .then((snapshot) => {
+              const timetableData = snapshot.val();
+
+              // Check if timetableData exists and is an object
+              if (timetableData && typeof timetableData === 'object') {
+                // Check for clashes with the current user's timetable
+                const clashes = Object.values(timetableData).some(classData =>
+                  classData.userID === userID && classData.day === selectedDay && classData.time === selectedTime
+                );
+
+                if (clashes) {
+                  alert("There is already a class scheduled at the selected day and time for the current user. Please choose a different day or time.");
+                  return;
+                }
+              }
+
+              // Create the structure for the timetable data
+              const classData = {
+                subjectName: selectedCourseName,
+                day: selectedDay,
+                time: selectedTime,
+                userID: userID, // Add the user ID to the class data
+              };
+
+              // Push the class data to the timetable in Firebase
+              push(timetableRef, classData)
+                .then(() => {
+                  // Clear the form and close the popup after adding the class
+                  courseDropdown.value = '';
+                  dayDropdown.value = '';
+                  timeDropdown.value = '';
+                  updateCourseDetails(selectedCourseName);
+                  updateTimetableTableForUser(); // Update the timetable table with the new class
+                  alert("Class added to the timetable!");
+                })
+                .catch((error) => {
+                  alert("Error adding class to the timetable: " + error.message);
+                });
+
+            })
+            .catch((error) => {
+              console.error("Error checking for timetable clashes:", error);
+            });
+        } else {
+          alert("Please select a subject, day, and time, or the user is not logged in.");
+        }
+      }
+
+
+      // Event listener for the "Add Class" button
+      document.getElementById("addClass").addEventListener("click", function(event) {
+        event.preventDefault();
+        addClassToTimetable();
+      });
+
+      // Retrieve the userId from localStorage and update the timetable table for the user
+      if (userId) {
+        updateTimetableTableForUser(userId);
+      }
+
+      // Event listener for the course dropdown
+      courseDropdown.addEventListener('change', function() {
+        const selectedCourseName = this.value;
+        updateCourseDetails(selectedCourseName);
+      });
+
+      // Fetch the data from Firebase and populate the dropdown
+      onValue(firebaseRef, function(snapshot) {
+        sheetData = snapshot.val();
+        for (const courseName in sheetData) {
+          if (sheetData.hasOwnProperty(courseName)) {
+            const courseOption = document.createElement('option');
+            courseOption.value = courseName;
+            courseOption.textContent = sheetData[courseName]['Course Name (English)'];
+            courseDropdown.appendChild(courseOption);
+          }
+        }
+      });
+
+      // Function to populate the class dropdown based on the user's ID
+      function populateClassDropdown(userID) {
+        const classDropdown = document.getElementById('classDropdown');
+
+        // Get the reference to the timetable node in the database
+        const timetableRef = ref(database, "timetable");
+
+        // Listen for changes in the timetable data
+        onValue(timetableRef, (snapshot) => {
+          const timetableData = snapshot.val();
+
+          // Check if timetableData exists and is an object
+          if (timetableData && typeof timetableData === 'object') {
+            // Filter timetable data based on the user ID
+            const userTimetableData = Object.values(timetableData).filter(classData => classData.userID === userID);
+
+            // Clear existing options in the dropdown
+            classDropdown.innerHTML = '<option value="" disabled selected>Select a class</option>';
+
+            // Create options for the dropdown based on the user's classes
+            userTimetableData.forEach(classData => {
+              const { subjectName, day, time } = classData;
+              const timeFormatted = time;
+              const subjectNameFormatted = subjectName;
+              const optionText = `Day: ${day} || Time: ${timeFormatted} || Subject: ${subjectNameFormatted}`;
+              const option = document.createElement('option');
+              option.value = optionText;
+              option.textContent = optionText;
+              classDropdown.appendChild(option);
+            });
+          }
+        });
+      }
+
+      let day_class, time_class, subject_class, class_data;
+
+      if (userID) {
+        populateClassDropdown(userID);
+
+        // Add event listener to the dropdown to handle selection
+        classDropdown.addEventListener('change', (event) => {
+                const selectedOptionText = event.target.value;
+                const [day, time, subjectName] = selectedOptionText.split(' || ');
+
+                // Do something with the extracted values (day, time, subjectName)
+                console.log(day);
+                console.log(time);
+                console.log(subjectName);
+                day_class = day;
+                time_class = time;
+                subject_class = subjectName
+            });
+      } 
+      else {
+        // If user ID is not available, display an error message or take appropriate action
+        console.error('User ID not found');
+      }
+
+      function startEmotionRecognition(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        // Make an AJAX request to start the emotion recognition
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{{ url_for('start_emotion_recognition_route') }}", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.message); // Show a message indicating that emotion recognition started
+          }
+        };
+
+        xhr.send();
+      }
+
+      function stopEmotionRecognition(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        // Make an AJAX request to stop the emotion recognition
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{{ url_for('stop_emotion_recognition_route') }}", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            alert(response.message); // Show a message indicating that emotion recognition stopped
+          }
+        };
+
+        xhr.send();
+      }
+
+      document.getElementById("startForm").addEventListener("submit", startEmotionRecognition);
+      document.getElementById("stopForm").addEventListener("submit", stopEmotionRecognition);
+      
+      // Set up EventSource to listen for SSE events
+      const eventSource = new EventSource("{{ url_for('emotion_data') }}");
+      eventSource.onmessage = function(event) {
+        const data = event.data;
+        // Process the received data (date, timestamp, status) from the server
+        // Split the data into individual values
+        const [date, timestamp, status] = data.split(" ");
+        /*console.log("Day:", day_class.replace(/Day: /g,''));
+        console.log("Date:", date);
+        console.log("Time:", time_class.replace(/Time: /g,''));
+        console.log("Subject Name:", subject_class.replace(/Subject: /g,''));
+        console.log("Timestamp:", timestamp);
+        console.log("Status:", status);*/
+
+        class_data = day_class + " | " + subject_class;
+        // Push the data to the Firebase Realtime Database under the userID node
+        const userID = localStorage.getItem('userID');
+        if (userID) {
+          const dataRef = ref(database, `emotion_data/${userID}/${date}/${class_data}/${timestamp}`);
+          push(dataRef, { status: status })
+            .then(() => {
+              console.log("Data successfully stored in Firebase.");
+            })
+            .catch((error) => {
+              console.error("Error storing data in Firebase:", error);
+            });
+        }
+      };
+
+      document.addEventListener('DOMContentLoaded', () => {
+        // Function to populate the dropdown
+        function populateClassAnalysisDropdown(userID) {
+          // Fetch data from Firebase for the specific userID
+          const userIDRef = ref(database, `emotion_data/${userID}`);
+          onValue(userIDRef, (snapshot) => {
+            const dropdown = document.getElementById('choose-class');
+            dropdown.innerHTML = ''; // Clear existing options
+
+            // Loop through the dates under the userID node
+            snapshot.forEach((dateSnapshot) => {
+              const date = dateSnapshot.key;
+
+              // Loop through the classes (which are dynamically generated keys)
+              dateSnapshot.forEach((classSnapshot) => {
+                // Get the key (classKey) and the value (e.g., "Day: Tuesday | Subject: CSP650 - PROJECT")
+                const classKey = classSnapshot.key;
+                const classValue = classSnapshot.val().status;
+
+                // Create and add an option element to the dropdown
+                const option = document.createElement('option');
+                option.value = `${date} , ${classKey}`;
+                option.textContent = `${date} , ${classKey}`; // Display the classKey in the dropdown
+                dropdown.appendChild(option);
+              });
+            });
+          });
+        }
+
+        if (userID) {
+          populateClassAnalysisDropdown(userID);
+
+          // Add event listener to the dropdown to handle selection
+          const classDropdown = document.getElementById('choose-class');
+          classDropdown.addEventListener('change', (event) => {
+            const selectedOptionText = event.target.value;
+            const [date, classKey] = selectedOptionText.split(' , ');
+
+            // Do something with the extracted values (date and classKey)
+            console.log("Date:", date);
+            console.log("Class Key:", classKey);
+          });
+
+          // Add event listener for changes in the Firebase data
+          const userIDRef = ref(database, `emotion_data/${userID}`);
+          onValue(userIDRef, (snapshot) => {
+            // Clear and repopulate the dropdown with updated data
+            populateClassAnalysisDropdown(userID);
+          });
+        } else {
+          // If user ID is not available, display an error message or take appropriate action
+          console.error('User ID not found');
+        }
+      });
+
+      // Add event listener to the dropdown to handle selection
+      const AnalysisclassDropdown = document.getElementById('choose-class');
+      AnalysisclassDropdown.addEventListener('change', (event) => {
+        const selectedOptionText = event.target.value;
+        const [date, classKey] = selectedOptionText.split(' , ');
+
+        // Call the function to calculate emotions, max, min, and percentages
+        calculateEmotionStatistics(userID, date, classKey);
+        // Call the function to create the scatter plot
+        createDotPlot(userID, date, classKey);
+      });
+
+      function calculateEmotionStatistics(userID, date, classKey) {
+        const database = getDatabase();
+        const emotionDataRef = ref(database, `emotion_data/${userID}/${date}/${classKey}`);
+
+        // Fetch the emotion data for the selected date and classKey
+        get(emotionDataRef).then((snapshot) => {
+          if (snapshot.exists()) {
+            const emotions = snapshot.val();
+
+            // Calculate total emotions and emotion counts
+            let totalEmotions = 0;
+            const emotionCounts = {};
+            for (const timestamp in emotions) {
+              for (const id in emotions[timestamp]) {
+                const emotionName = emotions[timestamp][id].status;
+                emotionCounts[emotionName] = (emotionCounts[emotionName] || 0) + 1;
+                totalEmotions++;
+              }
+            }
+
+            // Find max and min emotions
+            let maxEmotionName = "";
+            let maxEmotionCount = 0;
+            let minEmotionName = "";
+            let minEmotionCount = Number.MAX_SAFE_INTEGER;
+            for (const emotionName in emotionCounts) {
+              const emotionCount = emotionCounts[emotionName];
+              if (emotionCount > maxEmotionCount) {
+                maxEmotionName = emotionName;
+                maxEmotionCount = emotionCount;
+              }
+              if (emotionCount < minEmotionCount) {
+                minEmotionName = emotionName;
+                minEmotionCount = emotionCount;
+              }
+            }
+
+            // Calculate percentages for each emotion
+            const emotionPercentages = {};
+            for (const emotionName in emotionCounts) {
+              const percentage = (emotionCounts[emotionName] / totalEmotions) * 100;
+              emotionPercentages[emotionName] = percentage.toFixed(2); // Round to two decimal places
+            }
+
+            // Update the elements in the first-small-container
+            const maxEmotionElement = document.getElementById('maxEmotion');
+            const minEmotionElement = document.getElementById('minEmotion');
+            const totalCountEmotionElement = document.getElementById('totalCountEmotion');
+
+            maxEmotionElement.textContent = `${maxEmotionName} - ${maxEmotionCount}`;
+            minEmotionElement.textContent = `${minEmotionName} - ${minEmotionCount}`;
+            totalCountEmotionElement.textContent = `${totalEmotions}`;
+
+            // Update the elements in the second-small-container
+            const percentageContainer = document.getElementById('percentageContainer');
+            percentageContainer.innerHTML = '';
+
+            for (const emotionName in emotionPercentages) {
+              const emotionCount = emotionCounts[emotionName];
+              const percentage = emotionPercentages[emotionName];
+
+              const row = document.createElement('tr');
+              const nameCell = document.createElement('td');
+              nameCell.textContent = emotionName;
+              const countCell = document.createElement('td');
+              countCell.textContent = emotionCount;
+              const percentageCell = document.createElement('td');
+              percentageCell.textContent = `${percentage}%`;
+
+              row.appendChild(nameCell);
+              row.appendChild(countCell);
+              row.appendChild(percentageCell);
+
+              percentageContainer.appendChild(row);
+            }
+
+            // Create data for the pie chart
+            const pieData = [
+              {
+                labels: Object.keys(emotionPercentages),
+                values: Object.values(emotionCounts),
+                type: 'pie',
+              },
+            ];
+
+            // Set layout for the pie chart
+            const pieLayout = {
+              title: 'Pie Chart Emotion',
+            };
+
+            // Display the pie chart
+            Plotly.newPlot('pieChart', pieData, pieLayout);
+          } else {
+            console.error("No emotion data found for the selected date and classKey");
+          }
+        }).catch((error) => {
+          console.error("Error fetching emotion data:", error);
+        });
+      }
+
+      // Function to create the dot graph using Plotly
+      function createDotPlot(userID, date, classKey) {
+        // Fetch data from Firebase for the specific userID, date, and classKey
+        const dataRef = ref(database, `emotion_data/${userID}/${date}/${classKey}`);
+        onValue(dataRef, (snapshot) => {
+          const timestamps = [];
+          const emotions = [];
+
+          // Loop through the data for each timestamp
+          snapshot.forEach((timestampSnapshot) => {
+            const timestamp = timestampSnapshot.key;
+
+            // Loop through the randomly generated keys inside each timestamp
+            timestampSnapshot.forEach((emotionSnapshot) => {
+              // Get the emotion value (happy, fear, angry, sad, neutral, surprise, disgust)
+              const emotionValue = emotionSnapshot.val().status;
+
+              // Add the timestamp and emotion to the respective arrays
+              timestamps.push(timestamp);
+              emotions.push(emotionValue);
+            });
+          });
+
+          // Data trace for the scatter plot
+          const trace = {
+            x: timestamps, // timestamps on the x-axis
+            y: emotions, // emotion values on the y-axis
+            type: 'scatter',
+            mode: 'lines+markers', // Use lines and markers to show the data points
+            name: 'Emotion',
+            marker: { size: 10 }, // Adjust the size of the markers
+            text: emotions,
+          };
+
+          // Layout for the plot
+          const layout = {
+            title: 'Emotion Analysis',
+            xaxis: { title: 'Timestamp', type: 'category'},
+            yaxis: { title: 'Emotion Value', tickvals: [0, 1, 2, 3, 4, 5, 6], ticktext: ['Happy', 'Fear', 'Angry', 'Sad', 'Neutral', 'Surprise', 'Disgust'] },
+          };
+
+          // Render the plot using Plotly in the 'dotPlot' container
+          Plotly.newPlot('dotPlot', [trace], layout);
+        });
+      }
+
+    </script>
+
+    <script>
+      const classroomLink = document.querySelector('.classroom-link');
+      const setupLink = document.querySelector('.setup-link');
+      const analysisLink = document.querySelector('.analysis-link');
+      const classSection = document.getElementById('class-section');
+      const setupSection = document.getElementById('setup-section');
+      const analysisSection = document.getElementById('analysis-section');
+
+      classroomLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        classSection.classList.remove('hidden');
+        setupSection.classList.add('hidden');
+        analysisSection.classList.add('hidden');
+      });
+
+      setupLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        classSection.classList.add('hidden');
+        setupSection.classList.remove('hidden');
+        analysisSection.classList.add('hidden');
+      });
+
+      analysisLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        classSection.classList.add('hidden');
+        setupSection.classList.add('hidden');
+        analysisSection.classList.remove('hidden');
+      });
+
+      // Get the elements
+      const createClassButton = document.getElementById('createClass');
+      const popup = document.getElementById('popup');
+      const closePopupButton = document.getElementById('closePopup');
+
+      // Open the pop-up when "Add Class" button is clicked
+      createClassButton.addEventListener('click', function() {
+        popup.style.display = 'block';
+      });
+
+      // Close the pop-up when "Close" button is clicked
+      closePopupButton.addEventListener('click', function() {
+        popup.style.display = 'none';
+      });
+
+      // Get references to the dropdown and start button
+      const classDropdown = document.getElementById('classDropdown');
+      const startButton = document.getElementById('startButton');
+
+      // Add event listener to the dropdown to handle selection
+      classDropdown.addEventListener('change', (event) => {
+        const selectedOptionValue = event.target.value;
+
+        // Enable the start button if a valid option is selected, otherwise disable it
+        if (selectedOptionValue) {
+          startButton.disabled = false;
+        } else {
+          startButton.disabled = true;
+        }
+      });
+
+      // Add event listener to the Start button to handle click
+      startButton.addEventListener('click', (event) => {
+        // Check if the button is disabled (class not selected)
+        if (startButton.disabled) {
+          // Display an error message to the user in the console
+          console.error('Please choose a class first before clicking Start.');
+          event.preventDefault(); // Prevent form submission if the button is disabled
+        }
+      });
+    </script>
+
+  </div>
+</body>
+</html>
