@@ -144,5 +144,6 @@ def emotion_data():
     return Response(generate(), content_type='text/event-stream')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 3000))
+    app.run(host='0.0.0.0', port=port)
  
