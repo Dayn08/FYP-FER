@@ -1,1 +1,14 @@
-runtime: python310
+runtime: python39  # Use Python 3.9 runtime
+
+entrypoint: gunicorn -b :$PORT main:app  # Use Gunicorn as the web server
+
+handlers:
+- url: /static
+  static_dir: static
+
+
+- url: /.*
+  script: auto
+
+env_variables:
+  FLASK_ENV: "production"  # Set Flask environment to production
