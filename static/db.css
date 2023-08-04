@@ -58,6 +58,10 @@ a {
   padding: 10px;
 }
 
+.logout j{
+  position: relative; 
+}
+
 nav .fas {
   position: relative;
   width: 70px;

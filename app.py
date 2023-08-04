@@ -3,10 +3,6 @@ import cv2
 import numpy as np
 import datetime
 import tensorflow as tf
-import matplotlib
-matplotlib.use('Agg')  # Set the backend to Agg before importing pyplot
-import matplotlib.pyplot as plt
-import pandas as pd
 import os, time
 import threading
 from queue import Queue
@@ -144,6 +140,5 @@ def emotion_data():
     return Response(generate(), content_type='text/event-stream')
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 3000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
  
