@@ -1,5 +1,4 @@
 # 🎓 Final Year Project – Classroom Facial Emotion Recognition System
-
 This project presents a web-based facial emotion recognition system designed to support emotion-aware learning in classroom environments. The system integrates Raspberry Pi 4 with a camera module to capture students' facial expressions and stream them to a Flask-based web application for real-time analysis.
 
 The application detects and classifies students' emotions during lectures, allowing educators to evaluate engagement levels and adjust teaching strategies accordingly. By providing emotion insights through a web dashboard, the system helps promote a more interactive and empathetic learning experience.
