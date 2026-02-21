@@ -1,5 +1,4 @@
-# FYP-FER
-##🎓 Final Year Project – Classroom Facial Emotion Recognition System
+# 🎓 Final Year Project – Classroom Facial Emotion Recognition System
 
 This project presents a web-based facial emotion recognition system designed to support emotion-aware learning in classroom environments. The system integrates Raspberry Pi 4 with a camera module to capture students' facial expressions and stream them to a Flask-based web application for real-time analysis.
 
